@@ -4,7 +4,6 @@ from models.user import UserModel
 
 
 class UserRegister(Resource):
-	#ovo parsa json rikvesta, koristimo ga u def post
 	parser = reqparse.RequestParser()
 	parser.add_argument('username', type=str, required=True, help="Ovaj field nije blank")
 	parser.add_argument('password', type=str, required=True, help="Ovaj field nije blank")

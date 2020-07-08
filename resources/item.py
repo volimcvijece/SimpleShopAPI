@@ -2,9 +2,7 @@ from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from models.item import ItemModel
 
-#ovdje smo prije imali classmethode, ali ovo je resurs, konzumira se
-#a metode ne konzumira api direktno nego mi to radimo unutar koda, logicnije je to preseliti
-#Zato ima vise smisla staviti u models
+
 class Item(Resource):
     TABLE_NAME = 'items'
 
@@ -61,12 +59,11 @@ class Item(Resource):
 
         item = ItemModel.find_by_name(name)
         
-        #ako je none, saveaj u db
+        #ako je none, ponasaj se kao post
         if item is None:
             item = ItemModel(name, data['price'], data['store_id'])
         else:
             item.price = data['price']
-            #item.store_id = data['store_id']
         item.save_to_db()
         return item.json()
 
@@ -77,5 +74,5 @@ class ItemList(Resource):
     TABLE_NAME = 'items'
 
     def get(self):
-                #list(map(lambda x:x.json(), ItemModel.query.all())) - umjesto pythonic nacina list comprehensiona, mocan nacin
+        #list(map(lambda x:x.json(), ItemModel.query.all())) 
         return {'items': [item.json() for item in ItemModel.query.all()]}
